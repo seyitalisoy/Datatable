@@ -21,6 +21,7 @@ out/
 appsettings.json
 appsettings.*.json
 secrets.json
+DatatableDbContext.cs
 
 # Angular build outputs
 node_modules/
