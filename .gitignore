@@ -1,0 +1,55 @@
+# .NET build outputs
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+[Tt]emp/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+*.nupkg
+*.snupkg
+publish/
+out/
+*.Publish.xml
+*.pubxml
+*.pubxml.user
+
+# App settings (do not commit secrets)
+appsettings.json
+appsettings.*.json
+secrets.json
+
+# Angular build outputs
+node_modules/
+dist/
+build/
+.angular/cache
+.angular/*
+!.angular/cli.json
+
+# Logs
+*.log
+npm-debug.log
+yarn-error.log
+.pnpm-debug.log
+
+# IDE
+.idea/
+.vscode/
+*.code-workspace
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Temp files
+*.tmp
+*.swp
+*.bak
+
+# Env files
+.env
+.env.*
