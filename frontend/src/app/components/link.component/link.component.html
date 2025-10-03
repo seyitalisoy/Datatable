@@ -1,0 +1,28 @@
+<!-- Table (desktop/tablet) -->
+<div class="hidden md:block overflow-x-auto p-6">
+  <table class="min-w-full border border-gray-200 text-sm text-left">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="px-4 py-2 ">Linkler</th>
+        <th class="px-4 py-2 border-l">Site adı</th>
+        <th class="px-4 py-2 border-l">Açıklama</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of links" class="hover:bg-gray-50">
+        <td class="px-4 py-2 ">{{item.url}}</td>
+        <td class="px-4 py-2 ">{{item.name}}</td>
+        <td class="px-4 py-2 ">{{item.description}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Card görünüm (mobil) -->
+<div class="md:hidden p-4 space-y-4">
+  <div *ngFor="let item of links" class="border rounded p-3 shadow">
+    <p><strong>Link:</strong>{{item.url}}</p>
+    <p><strong>Site Adı:</strong>{{item.name}}</p>
+    <p><strong>Açıklama:</strong>{{item.description}}</p>
+  </div>
+</div>
