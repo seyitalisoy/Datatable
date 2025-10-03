@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.ValidationRules;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -20,6 +22,7 @@ namespace Business.Concrete
             _linkDal = linkDal;
         }
 
+        [ValidationAspect(typeof(LinkValidator))]
         public IResult Add(Link link)
         {
             _linkDal.Add(link);
@@ -52,6 +55,7 @@ namespace Business.Concrete
             return new ErrorDataResult<List<Link>>("Link bulunmamaktadır.");
         }
 
+        [ValidationAspect(typeof(LinkValidator))]
         public IResult Update(Link link)
         {
             _linkDal.Update(link);
