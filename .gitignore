@@ -54,3 +54,8 @@ Thumbs.db
 # Env files
 .env
 .env.*
+
+# frontend source files
+
+/frontend/.angular/cache/20.3.3/frontend/vite
+/frontend/.angular/cache/20.3.3/frontend/.tsbuildinfo
