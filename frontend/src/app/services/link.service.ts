@@ -27,7 +27,8 @@ export class LinkService {
     .get<SingleResponseModel<RequestedLinksDto>>(newUrl,{
       params:{
         pageNumber: pageRequest.pageNumber,
-        pageSize : pageRequest.pageSize
+        pageSize : pageRequest.pageSize,
+        filterText : pageRequest.filterText
       }
     })
   }

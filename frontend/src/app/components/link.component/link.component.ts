@@ -5,13 +5,15 @@ import { CommonModule } from '@angular/common';
 import { LucideAngularModule, ArrowDown, ArrowUp,ChevronLeft,ChevronRight } from 'lucide-angular';
 import { PageRequestDto } from '../../models/pageRequestDto';
 import { FormsModule } from '@angular/forms';
+import { FilterComponent } from '../filter.component/filter.component';
 
 @Component({
   selector: 'app-link',
   imports: [
     CommonModule,
     LucideAngularModule,
-    FormsModule
+    FormsModule,
+    FilterComponent
   ],
   templateUrl: './link.component.html',
   styleUrl: './link.component.css'
@@ -29,7 +31,7 @@ export class LinkComponent implements OnInit {
   arrowDown = ArrowDown;
   chevronLeft = ChevronLeft;
   chevronRight= ChevronRight;
-
+  filterText: string = '';
 
   links: Link[] = [];
   constructor(private linkService: LinkService) { }
@@ -46,7 +48,8 @@ export class LinkComponent implements OnInit {
   }
 
   getLinksByPagination() {
-    let pageRequestDto: PageRequestDto = { pageNumber: this.currentPage, pageSize: this.pageSize };
+    let pageRequestDto: PageRequestDto = 
+    { pageNumber: this.currentPage, pageSize: this.pageSize,filterText:this.filterText};
     this.linkService
       .getLinksByPagination(pageRequestDto)
       .subscribe(response => {
@@ -81,6 +84,12 @@ export class LinkComponent implements OnInit {
 
   onSizeChange(size: number) {
     this.pageSize = size;
+    this.getLinksByPagination();
+  }
+
+  onFilterChanged(text:string){
+    this.filterText = text;
+    this.currentPage = 1 ;
     this.getLinksByPagination();
   }
 
