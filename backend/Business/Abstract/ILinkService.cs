@@ -1,5 +1,6 @@
 ﻿using Core.Utilities.Results;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,9 @@ namespace Business.Abstract
     public interface ILinkService
     {
         IDataResult<List<Link>> Getall();
+
+        IDataResult<SpecifiedLinksDto> GetSpecifiedLinks(PageDto pageDto);
+
         IDataResult<Link> Get(int id);
 
         IResult Add(Link link);

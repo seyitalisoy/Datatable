@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -64,6 +65,17 @@ namespace WebAPI.Controllers
         public IActionResult Update(Link link)
         {
             var result = _linkService.Update(link);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("getlinksbypagination")]
+        public IActionResult GetLinksByPagination([FromQuery] PageDto dto)
+        {
+            var result = _linkService.GetSpecifiedLinks(dto);
             if (result.Success)
             {
                 return Ok(result);

@@ -4,6 +4,7 @@ using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,6 +54,17 @@ namespace Business.Concrete
                 return new SuccessDataResult<List<Link>>(result);
             }
             return new ErrorDataResult<List<Link>>("Link bulunmamaktadır.");
+        }
+
+        public IDataResult<SpecifiedLinksDto> GetSpecifiedLinks(PageDto pageDto)
+        {
+            var links = Getall().Data.OrderBy(p => p.Id)
+                .Skip((pageDto.PageNumber - 1) * pageDto.PageSize)
+                .Take(pageDto.PageSize)
+                .ToList();
+            var linkCount = Getall().Data.Count;
+            var result = new SpecifiedLinksDto{ Links = links, LinkCount = linkCount };
+            return new SuccessDataResult<SpecifiedLinksDto>(result);
         }
 
         [ValidationAspect(typeof(LinkValidator))]
