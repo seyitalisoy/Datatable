@@ -2,26 +2,86 @@ import { Component, OnInit } from '@angular/core';
 import { LinkService } from '../../services/link.service';
 import { Link } from '../../models/link';
 import { CommonModule } from '@angular/common';
+import { LucideAngularModule, ArrowDown, ArrowUp,ChevronLeft,ChevronRight } from 'lucide-angular';
+import { PageRequestDto } from '../../models/pageRequestDto';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-link',
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    LucideAngularModule,
+    FormsModule
+  ],
   templateUrl: './link.component.html',
   styleUrl: './link.component.css'
 })
-export class LinkComponent implements OnInit{
 
-  links : Link[]= [];
-  constructor(private linkService: LinkService){}
-  
+export class LinkComponent implements OnInit {
+  pageSize: number = 10;
+  currentPage: number = 1;
+  totalPages: number = 10;
+  totalLinkCount: number = 0;
+  sizes: number[] = [3, 5, 10]
+  pages: number[] = []
+  isAscending: boolean = true;
+  arrowUp = ArrowUp;
+  arrowDown = ArrowDown;
+  chevronLeft = ChevronLeft;
+  chevronRight= ChevronRight;
+
+
+  links: Link[] = [];
+  constructor(private linkService: LinkService) { }
+
   ngOnInit(): void {
-    this.getallLinks();
+    this.getLinksByPagination();
+    
   }
 
-  getallLinks(){
-    this.linkService.getall().subscribe(response=>{
+  getallLinks() {
+    this.linkService.getall().subscribe(response => {
       this.links = response.data;
     })
+  }
+
+  getLinksByPagination() {
+    let pageRequestDto: PageRequestDto = { pageNumber: this.currentPage, pageSize: this.pageSize };
+    this.linkService
+      .getLinksByPagination(pageRequestDto)
+      .subscribe(response => {
+        this.links = response.data.links;
+        this.totalLinkCount = response.data.linkCount;
+        this.totalPages = Math.ceil(this.totalLinkCount / this.pageSize)
+        this.pages= [];
+        for (let i = 1; i <= this.totalPages; i++) {
+          this.pages.push(i);
+        }
+      })
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.getLinksByPagination();
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.getLinksByPagination();
+    }
+  }
+
+  reverse() {
+    this.links = this.links.reverse();
+    this.isAscending = !this.isAscending;
+  }
+
+  onSizeChange(size: number) {
+    this.pageSize = size;
+    this.getLinksByPagination();
   }
 
 }

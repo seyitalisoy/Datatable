@@ -1,11 +1,30 @@
 <!-- Table (desktop/tablet) -->
-<div class="hidden md:block overflow-x-auto p-6">
+<!-- hidden md:block -->
+<div class="overflow-x-auto p-6">
   <table class="min-w-full border border-gray-200 text-sm text-left">
     <thead class="bg-gray-100">
       <tr>
-        <th class="px-4 py-2 ">Linkler</th>
-        <th class="px-4 py-2 border-l">Site adı</th>
-        <th class="px-4 py-2 border-l">Açıklama</th>
+        <th class="px-4 py-2">
+          <div class="flex items-center justify-between">
+            Linkler
+            <span-lucide [img]="isAscending ? arrowUp : arrowDown" class="ml-auto cursor-pointer" (click)="reverse()">
+            </span-lucide>
+          </div>
+        </th>
+        <th class="px-4 py-2 border-l">
+          <div class="flex items-center justify-between">
+            Site adı
+            <span-lucide [img]="isAscending ? arrowUp : arrowDown" class="ml-auto cursor-pointer" (click)="reverse()">
+            </span-lucide>
+          </div>
+        </th>
+        <th class="px-4 py-2 border-l">
+          <div class="flex items-center justify-between">
+            Açıklama
+            <span-lucide [img]="isAscending ? arrowUp : arrowDown" class="ml-auto cursor-pointer" (click)="reverse()">
+            </span-lucide>
+          </div>
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -16,13 +35,45 @@
       </tr>
     </tbody>
   </table>
+
+  <div class="flex text-center justify-between">
+    <label>
+      Sayfa Başına Kayıt:
+      <select [(ngModel)]="pageSize" (ngModelChange)="onSizeChange($event)">
+        <option *ngFor="let size of sizes" [ngValue]="size">{{ size }}</option>
+      </select>
+    </label>
+
+    <div class="flex justify-center items-center">
+      <button class="mr-1 p-1 cursor-pointer" (click)="prevPage()" *ngIf="currentPage > 1">
+        <span-lucide [img]="chevronLeft"></span-lucide>
+      </button>
+      <ng-container *ngFor="let page of pages">
+          <span *ngIf="page === currentPage" class="text-red-500">{{currentPage}}</span>          
+      </ng-container>
+      <span class="text-blue-700 mx-1">of</span>
+      <span class="text-red-500">{{totalPages}}</span>
+      <button class=" p-1 mr-1 cursor-pointer " (click)="nextPage()" *ngIf="totalPages > currentPage">
+        <span-lucide [img]="chevronRight"></span-lucide>
+      </button>
+    </div>
+
+  </div>
 </div>
 
+
+
+
+<!-- <lucide-angular [img]="FileIcon" class="my-icon"></lucide-angular>
+<lucide-icon [img]="FileIcon" class="my-icon"></lucide-icon>
+<i-lucide [img]="FileIcon" class="my-icon"></i-lucide>
+<span-lucide [img]="FileIcon" class="my-icon"></span-lucide> -->
+
 <!-- Card görünüm (mobil) -->
-<div class="md:hidden p-4 space-y-4">
+<!-- <div class="md:hidden p-4 space-y-4">
   <div *ngFor="let item of links" class="border rounded p-3 shadow">
     <p><strong>Link:</strong>{{item.url}}</p>
     <p><strong>Site Adı:</strong>{{item.name}}</p>
     <p><strong>Açıklama:</strong>{{item.description}}</p>
   </div>
-</div>
+</div> -->
