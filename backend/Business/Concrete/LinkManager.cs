@@ -58,14 +58,36 @@ namespace Business.Concrete
 
         public IDataResult<SpecifiedLinksDto> GetSpecifiedLinks(PageDto pageDto)
         {
-            var links = Getall().Data.OrderBy(p => p.Id)
+            var linksQuery = Getall().Data.AsQueryable();
+
+            if (!string.IsNullOrEmpty(pageDto.filterText))
+            {
+                string keyword = pageDto.filterText.ToLower();
+
+                linksQuery = linksQuery.Where(i =>
+                    (i.Url ?? string.Empty).ToLower().Contains(keyword) ||
+                    (i.Name ?? string.Empty).ToLower().Contains(keyword) ||
+                    (i.Description ?? string.Empty).ToLower().Contains(keyword)
+                );
+            }
+
+            var linkCount = linksQuery.Count();
+
+            var pagedLinks = linksQuery
+                .OrderBy(p => p.Id)
                 .Skip((pageDto.PageNumber - 1) * pageDto.PageSize)
                 .Take(pageDto.PageSize)
                 .ToList();
-            var linkCount = Getall().Data.Count;
-            var result = new SpecifiedLinksDto{ Links = links, LinkCount = linkCount };
+
+            var result = new SpecifiedLinksDto
+            {
+                Links = pagedLinks,
+                LinkCount = linkCount
+            };
+
             return new SuccessDataResult<SpecifiedLinksDto>(result);
         }
+
 
         [ValidationAspect(typeof(LinkValidator))]
         public IResult Update(Link link)

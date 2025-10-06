@@ -11,5 +11,6 @@ namespace Entities.DTOs
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
+        public string? filterText { get; set; }
     }
 }
