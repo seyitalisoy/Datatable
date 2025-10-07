@@ -22,8 +22,8 @@ namespace Business.ValidationRules
             RuleFor(l => l.Description).MaximumLength(200)
                 .WithMessage("Açıklama 200 karakterden fazla olamaz");
 
-            RuleFor(l => l.CreatedAt).NotEmpty()
-                .WithMessage("Link oluşturulma tarihi boş geçilemez");
+            //RuleFor(l => l.CreatedAt).NotEmpty()
+            //    .WithMessage("Link oluşturulma tarihi boş geçilemez");
         }
 
         private bool validUrl(string link)

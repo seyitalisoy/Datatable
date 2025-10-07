@@ -26,7 +26,9 @@ namespace Business.Concrete
         [ValidationAspect(typeof(LinkValidator))]
         public IResult Add(Link link)
         {
-            _linkDal.Add(link);
+            var newLink = link;
+            newLink.CreatedAt = DateTime.Now;
+            _linkDal.Add(newLink);
             return new SuccessResult("Link başarıyla eklendi.");
         }
 
