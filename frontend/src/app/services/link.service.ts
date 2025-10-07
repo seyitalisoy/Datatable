@@ -33,4 +33,9 @@ export class LinkService {
     })
   }
 
+  add(link: Link): Observable<ListResponseModel<Link>>{
+    let newUrl = this.apiUrl+"add";
+    return this.httpClient.post<ListResponseModel<Link>>(newUrl,link);
+  }
+
 }

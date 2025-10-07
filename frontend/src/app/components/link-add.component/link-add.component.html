@@ -1,0 +1,69 @@
+<form
+  [formGroup]="linkAddForm"
+  (ngSubmit)="addLink()"
+  class="max-w-md mx-auto p-4 rounded-lg "
+>
+  <!-- Link Name -->
+  <div class="mb-3">
+    <input
+      type="text"
+      formControlName="name"
+      placeholder="Bağlantı Adı"
+      class="w-full p-2 border rounded"
+    />
+    <div
+      *ngIf="
+        linkAddForm.get('name')?.invalid &&
+        linkAddForm.get('name')?.touched
+      "
+      class="text-red-500 text-sm mt-1"
+    >
+      <span *ngIf="linkAddForm.get('name')?.errors?.['required']">
+        Ad alanı zorunludur.
+      </span>
+      <span *ngIf="linkAddForm.get('name')?.errors?.['minlength']">
+        Ad en az 2 karakter olmalıdır.
+      </span>
+    </div>
+  </div>
+
+  <!-- URL -->
+  <div class="mb-3">
+    <input
+      type="url"
+      formControlName="url"
+      placeholder="Bağlantı URL'si (https://örnek.com)"
+      class="w-full p-2 border rounded"
+    />
+    <div
+      *ngIf="
+        linkAddForm.get('url')?.invalid &&
+        linkAddForm.get('url')?.touched
+      "
+      class="text-red-500 text-sm mt-1"
+    >
+      <span *ngIf="linkAddForm.get('url')?.errors?.['required']">
+        URL alanı zorunludur.
+      </span>
+      <span *ngIf="linkAddForm.get('url')?.errors?.['pattern']">
+        Geçerli bir URL girin (http:// veya https:// ile başlamalıdır).
+      </span>
+    </div>
+  </div>
+
+  <!-- Desc -->
+  <div class="mb-3">
+    <textarea
+      formControlName="description"
+      placeholder="Açıklama (isteğe bağlı)"
+      class="w-full p-2 border rounded"
+    ></textarea>
+  </div>
+
+  <button
+    type="submit"
+    class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+  >
+    Kaydet
+  </button>
+</form>

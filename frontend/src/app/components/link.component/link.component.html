@@ -1,43 +1,40 @@
-<div class="overflow-x-auto p-6">
-  <app-filter (filterChanged)="onFilterChanged($event)"></app-filter>
+<div class="overflow-x-auto p-6 relative">
+  <div class="flex justify-between items-center mb-4">
+    <app-filter (filterChanged)="onFilterChanged($event)"></app-filter>
+
+    <!-- Ekle Butonu -->
+    <button
+      class="flex items-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+      (click)="showAddForm()"
+    >
+      <span-lucide [img]="plus" class="w-4 h-4 mr-1"></span-lucide>
+      Ekle
+    </button>
+    
+  </div>
+
+  <!-- Tablo -->
   <table class="min-w-full border border-gray-200 text-sm text-left">
     <thead class="bg-gray-100">
       <tr>
-        <th class="px-4 py-2">
-          <div class="flex items-center justify-between">
-            Linkler
-            <span-lucide [img]="isAscending ? arrowUp : arrowDown" class="ml-auto cursor-pointer" (click)="reverse()">
-            </span-lucide>
-          </div>
-        </th>
-        <th class="px-4 py-2 border-l">
-          <div class="flex items-center justify-between">
-            Site adı
-            <span-lucide [img]="isAscending ? arrowUp : arrowDown" class="ml-auto cursor-pointer" (click)="reverse()">
-            </span-lucide>
-          </div>
-        </th>
-        <th class="px-4 py-2 border-l">
-          <div class="flex items-center justify-between">
-            Açıklama
-            <span-lucide [img]="isAscending ? arrowUp : arrowDown" class="ml-auto cursor-pointer" (click)="reverse()">
-            </span-lucide>
-          </div>
-        </th>
+        <th class="px-4 py-2">Link</th>
+        <th class="px-4 py-2 border-l">Site Adı</th>
+        <th class="px-4 py-2 border-l">Açıklama</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let item of links" class="hover:bg-gray-50">
-        <td class="px-4 py-2 ">{{item.url}}</td>
-        <td class="px-4 py-2 ">{{item.name}}</td>
-        <td class="px-4 py-2 ">{{item.description}}</td>
+        <td class="px-4 py-2">{{ item.url }}</td>
+        <td class="px-4 py-2">{{ item.name }}</td>
+        <td class="px-4 py-2">{{ item.description }}</td>
       </tr>
     </tbody>
   </table>
 
-  <div class="flex text-center justify-between">
+  <!-- Sayfalama -->
+  <div class="flex text-center justify-between mt-4">
     <label>
-      Sayfa Başına Kayıt:
+      Sayfa Başına:
       <select [(ngModel)]="pageSize" (ngModelChange)="onSizeChange($event)">
         <option *ngFor="let size of sizes" [ngValue]="size">{{ size }}</option>
       </select>
@@ -47,15 +44,33 @@
       <button class="mr-1 p-1 cursor-pointer" (click)="prevPage()" *ngIf="currentPage > 1">
         <span-lucide [img]="chevronLeft"></span-lucide>
       </button>
-      <ng-container *ngFor="let page of pages">
-        <span *ngIf="page === currentPage" class="text-red-500">{{currentPage}}</span>
-      </ng-container>
-      <span class="text-blue-700 mx-1">of</span>
-      <span class="text-red-500">{{totalPages}}</span>
-      <button class=" p-1 mr-1 cursor-pointer " (click)="nextPage()" *ngIf="totalPages > currentPage">
+      <span class="text-red-500">{{ currentPage }}</span>
+      <span class="mx-1">/</span>
+      <span class="text-blue-700">{{ totalPages }}</span>
+      <button class="ml-1 p-1 cursor-pointer" (click)="nextPage()" *ngIf="currentPage < totalPages">
         <span-lucide [img]="chevronRight"></span-lucide>
       </button>
     </div>
-
   </div>
+
+  <!-- Modal -->
+  <!-- Modal -->
+<div
+  *ngIf="openAddForm"
+  class="fixed inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm z-50 transition-opacity"
+>
+  <div class="relative bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+    <button
+      class="absolute top-3 right-3 text-gray-500 hover:text-red-500 transition"
+      (click)="closeAddForm()"
+    >
+      <!-- Daha şık bir X ikonu -->
+      <span-lucide [img]="x" class="w-6 h-6"></span-lucide>
+    </button>
+
+    <app-link-add></app-link-add>
+  </div>
+</div>
+
+
 </div>
