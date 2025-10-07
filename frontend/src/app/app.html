@@ -1,2 +1,18 @@
+<!-- <app-navbar></app-navbar>
 <app-link></app-link>
-<router-outlet />
+<router-outlet /> -->
+<div class="flex flex-col min-h-screen relative ">
+  <!-- Navbar -->
+  <div class="fixed top-0 left-0 right-0 z-50">
+    <app-navbar></app-navbar>
+  </div>
+
+  <!-- İçerik -->
+  <main class="overflow-x-auto py-6 px-6 pt-16 relative z-0">
+    <app-link></app-link>
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+
+

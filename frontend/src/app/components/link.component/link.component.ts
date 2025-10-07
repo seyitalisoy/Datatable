@@ -87,6 +87,7 @@ export class LinkComponent implements OnInit {
   }
 
   onSizeChange(size: number) {
+    this.currentPage = 1;
     this.pageSize = size;
     this.getLinksByPagination();
   }
