@@ -1,0 +1,56 @@
+<header class="bg-white shadow-md fixed w-full top-0 left-0 z-50">
+  <div class="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+    <!-- Logo -->
+    <div class="flex items-center space-x-2">
+      <!-- <span-lucide [img]="rocket" class="w-7 h-7 text-purple-700"></span-lucide>
+      <span class="font-bold text-xl text-purple-700">RastMobile</span> -->
+      <a href="https://rastmobile.com" class="cursor-pointer"><img src="icons/rastMobile.svg" alt="rastmobile"/></a>
+    </div>
+
+    <!-- Menü butonu (mobil) -->
+    <button
+      class="md:hidden text-gray-700 focus:outline-none"
+      (click)="toggleMenu()"
+    >
+      <span-lucide [img]="menu" class="w-7 h-7"></span-lucide>
+    </button>
+
+    <!-- Menü -->
+    <nav
+      class="hidden md:flex space-x-8 font-medium text-gray-700"
+    >
+      <a href="https://rastmobile.com/tr/hakkimizda" class="hover:text-purple-700 font-mono">Hakkımızda</a>
+      <a href="https://rastmobile.com/tr/urunler/juri-yarisma-yazilimi" class="hover:text-purple-700 font-mono">Jüri - Yarışma Yazılımı</a>
+      <a href="https://rastmobile.com/tr/urunler/word-ninja" class="hover:text-purple-700 font-mono">World Ninja</a>
+      <a href="https://rastmobile.com/tr/urunler/word-pyramids" class="hover:text-purple-700 font-mono">World Pyramids</a>
+    </nav>
+
+    <!-- Sosyal Medya -->
+    <div class="hidden md:flex space-x-4 text-gray-600">
+      <a href="https://www.instagram.com/mobilerast/" class="cursor-pointer"><img src="icons/instagram.svg" alt="instagram" class="w-6 h-6" /></a>
+      <a href="https://tr.linkedin.com/company/rastmobile" class="cursor-pointer"><img src="icons/linkedin.svg" alt="linkedin" class="w-6 h-6" /></a>
+      <a href="https://www.youtube.com/channel/UC9zhWu89h4AqolHrVspLkVw" class="cursor-pointer"><img src="icons/youtube.svg" alt="youtube" class="w-6 h-6" /></a>
+      <a href="https://www.behance.net/rastmobile" class="cursor-pointers"><img src="icons/behance.svg" alt="behance" class="w-6 h-6" /></a>
+
+    </div>
+  </div>
+
+  <!-- Mobil Menü -->
+  <div
+    *ngIf="isMenuOpen"
+    class="md:hidden bg-white shadow-inner border-t"
+  >
+    <nav class="flex flex-col items-center py-4 space-y-3 text-gray-700 font-medium">
+      <a href="https://rastmobile.com/tr/hakkimizda" class="hover:text-purple-700 font-mono">Hakkımızda</a>
+      <a href="https://rastmobile.com/tr/urunler/juri-yarisma-yazilimi" class="hover:text-purple-700 font-mono">Jüri - Yarışma Yazılımı</a>
+      <a href="https://rastmobile.com/tr/urunler/word-ninja" class="hover:text-purple-700 font-mono">World Ninja</a>
+      <a href="https://rastmobile.com/tr/urunler/word-pyramids" class="hover:text-purple-700 font-mono">World Pyramids</a>
+      <div class="flex space-x-4 pt-3 border-t pt-3">
+        <a href="https://www.instagram.com/mobilerast/" class="cursor-pointer"><a class="cursor-pointer"><img src="icons/instagram.svg" alt="instagram" class="w-6 h-6" /></a></a>
+        <a href="https://www.youtube.com/channel/UC9zhWu89h4AqolHrVspLkVw" class="cursor-pointer"><a class="cursor-pointer"><img src="icons/youtube.svg" alt="youtube" class="w-6 h-6" /></a></a>
+        <a href="https://tr.linkedin.com/company/rastmobile" class="cursor-pointer"><a class="cursor-pointer"><img src="icons/linkedin.svg" alt="linkedin" class="w-6 h-6" /></a></a>
+        <a href="https://www.behance.net/rastmobile" class="cursor-pointer"><a class="cursor-pointer"><img src="icons/behance.svg" alt="behance" class="w-6 h-6" /></a></a>
+      </div>
+    </nav>
+  </div>
+</header>
