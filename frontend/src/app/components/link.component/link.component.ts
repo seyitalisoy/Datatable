@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { LinkService } from '../../services/link.service';
 import { Link } from '../../models/link';
 import { CommonModule } from '@angular/common';
-import { LucideAngularModule, ArrowDown, ArrowUp, ChevronLeft, ChevronRight,Plus,X } from 'lucide-angular';
+import { LucideAngularModule, ArrowDown, ArrowUp, ChevronLeft, ChevronRight, Plus, X, Trash2, LoaderIcon } from 'lucide-angular';
 import { PageRequestDto } from '../../models/pageRequestDto';
 import { FormsModule } from '@angular/forms';
 import { FilterComponent } from '../filter.component/filter.component';
 import { LinkAddComponent } from '../link-add.component/link-add.component';
+import { LinkUpdateComponent } from '../link-update.component/link-update.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-link',
@@ -15,13 +17,14 @@ import { LinkAddComponent } from '../link-add.component/link-add.component';
     LucideAngularModule,
     FormsModule,
     FilterComponent,
-    LinkAddComponent
+    LinkAddComponent,
+    LinkUpdateComponent
   ],
   templateUrl: './link.component.html',
   styleUrl: './link.component.css'
 })
 export class LinkComponent implements OnInit {
-  pageSize: number = 10;
+  pageSize: number = 5;
   currentPage: number = 1;
   totalPages: number = 10;
   totalLinkCount: number = 0;
@@ -32,16 +35,24 @@ export class LinkComponent implements OnInit {
   arrowDown = ArrowDown;
   chevronLeft = ChevronLeft;
   chevronRight = ChevronRight;
-  x= X;
+  x = X;
   plus = Plus;
+  deleteIcon = Trash2;
+  loader = LoaderIcon;
+
+  deletedLink!: Link;
+  isLinksLoaded: boolean = false;
 
   filterText: string = '';
-  
+  currentLink!: Link;
+
   links: Link[] = [];
 
   openAddForm: boolean = false;
+  openUpdateForm: boolean = false;
+  openDeleteForm: boolean = false;
 
-  constructor(private linkService: LinkService) {}
+  constructor(private linkService: LinkService, private matSnackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.getLinksByPagination();
@@ -57,6 +68,7 @@ export class LinkComponent implements OnInit {
     this.linkService
       .getLinksByPagination(pageRequestDto)
       .subscribe(response => {
+        this.isLinksLoaded= false;
         this.links = response.data.links;
         this.totalLinkCount = response.data.linkCount;
         this.totalPages = Math.ceil(this.totalLinkCount / this.pageSize);
@@ -64,6 +76,7 @@ export class LinkComponent implements OnInit {
         for (let i = 1; i <= this.totalPages; i++) {
           this.pages.push(i);
         }
+        this.isLinksLoaded = true;
       });
   }
 
@@ -105,4 +118,46 @@ export class LinkComponent implements OnInit {
   closeAddForm() {
     this.openAddForm = false;
   }
+
+  showUpdateForm(link: Link) {
+    this.openUpdateForm = true;
+    this.currentLink = link;
+  }
+
+  closeUpdateForm() {
+    this.openUpdateForm = false;
+  }
+
+  showDeleteForm(event: MouseEvent, link: Link) {
+    event.stopPropagation();
+    this.deletedLink = link;
+    this.openDeleteForm = true;
+  }
+
+  closeDeleteForm() {
+    this.openDeleteForm = false;
+  }
+
+  deleteLink() {
+    let link = this.deletedLink;
+    this.linkService.delete(link).subscribe({
+      next: (response) => {
+        this.deletedLink = {} as Link;
+        this.currentPage = 1;
+        this.matSnackBar.open("Link Başarıyla silindi", "Kapat", {
+          duration: 3000,
+          panelClass: ["bg-green-600", "text-white"]
+        });
+        this.closeDeleteForm();
+        this.getLinksByPagination();
+      },
+      error: (error) => {
+        this.matSnackBar.open("Link silme başarısız", "Kapat", {
+          duration: 3000,
+          panelClass: ["bg-red-600", "text-white"]
+        });
+      }
+    })
+  }
+
 }

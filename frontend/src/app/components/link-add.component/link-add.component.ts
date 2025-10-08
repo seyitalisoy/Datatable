@@ -15,43 +15,44 @@ export class LinkAddComponent implements OnInit {
 
   linkAddForm!: FormGroup;
 
-  constructor(private linkService: LinkService, 
+  constructor(private linkService: LinkService,
     private formBuilder: FormBuilder,
-    private snackBar : MatSnackBar) { }
+    private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.createLinkAddForm();
   }
 
-createLinkAddForm() {
-  this.linkAddForm = this.formBuilder.group({
-    url: [
-      '',
-      [
-        Validators.required,
-        Validators.pattern(
-          /^(https?:\/\/)([\w\-]+\.)+[\w\-]+(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/
-        )
-      ]
-    ],
-    name: [
-      '',
-      [
-        Validators.required,
-        Validators.minLength(2)
-      ]
-    ],
-    description: ['']
-  });
-}
+  createLinkAddForm() {
+    this.linkAddForm = this.formBuilder.group({
+      url: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(
+            /^(https?:\/\/)([\w\-@]+\.)+[\w\-@]+(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/
+          )
+
+        ]
+      ],
+      name: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2)
+        ]
+      ],
+      description: ['']
+    });
+  }
 
 
 
   addLink() {
     if (this.linkAddForm.valid) {
-      let link: Link = Object.assign({},this.linkAddForm.value);
+      let link: Link = Object.assign({}, this.linkAddForm.value);
       this.linkService.add(link).subscribe({
-         next: (response) => {
+        next: (response) => {
           this.snackBar.open(response.message || 'Link eklendi', 'Kapat', {
             duration: 3000,
             panelClass: ['bg-green-600', 'text-white']
@@ -64,7 +65,7 @@ createLinkAddForm() {
           });
         }
       });
-    }else {
+    } else {
       this.linkAddForm.markAllAsTouched();
       this.snackBar.open('Form geçersiz', 'Kapat', {
         duration: 2000,

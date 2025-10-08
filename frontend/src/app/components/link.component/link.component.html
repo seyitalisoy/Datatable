@@ -1,59 +1,55 @@
-<div>
-<div
-  class="sticky top-0 bg-white z-10 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 pt-3 pb-3 border-b"
->
-  <app-filter
-    class="w-full mt-3 sm:w-auto"
-    (filterChanged)="onFilterChanged($event)"
-  ></app-filter>
+<div class="pt-[61px]">
+  <div class=" bg-white z-10 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 pt-3 pb-3 border-b">
+    <app-filter class="w-full mt-3 sm:w-auto" (filterChanged)="onFilterChanged($event)"></app-filter>
 
-  <button
-    class="flex items-center justify-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full sm:w-auto"
-    (click)="showAddForm()"
-  >
-    <span-lucide [img]="plus" class="w-3 h-3 mr-1"></span-lucide>
-    Ekle
-  </button>
-</div>
+    <button
+      class="flex items-center justify-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full sm:w-auto"
+      (click)="showAddForm()">
+      <span-lucide [img]="plus" class="w-3 h-3 mr-1"></span-lucide>
+      Ekle
+    </button>
+  </div>
 
+    <!-- spinner -->
+  <div *ngIf="!isLinksLoaded" 
+       class="flex items-center justify-center bg-white/50 z-10">
+    <span-lucide [img]="loader" class="w-8 h-8 animate-spin text-blue-600"></span-lucide>
+  </div>
+  
+ <table *ngIf="isLinksLoaded" class="min-w-full border border-gray-200 text-sm text-left">
+      <thead class="bg-gray-100">
+        <tr>
+          <!-- <th></th> -->
+          <th class="px-4 py-2 cursor-pointer select-none" (click)="reverse()">
+            Link
+            <span-lucide [img]="isAscending ? arrowUp : arrowDown" class="w-4 h-4 inline-block ml-1"></span-lucide>
+          </th>
+          <th class="px-4 py-2 border-l cursor-pointer select-none" (click)="reverse()">
+            Site Adı
+            <span-lucide [img]="isAscending ? arrowUp : arrowDown" class="w-4 h-4 inline-block ml-1"></span-lucide>
+          </th>
+          <th class="px-4 py-2 border-l cursor-pointer select-none" (click)="reverse()">
+            Açıklama
+            <span-lucide [img]="isAscending ? arrowUp : arrowDown" class="w-4 h-4 inline-block ml-1"></span-lucide>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of links" class="hover:bg-gray-50 cursor-pointer" (click)="showUpdateForm(item)">
+          <td class="px-4 py-2">{{ item.url }}</td>
+          <td class="px-4 py-2">{{ item.name }}</td>
 
+          <td class="px-4 py-2 flex justify-between">
+            <span>{{ item.description }}</span>
+            <span-lucide [img]="deleteIcon" class="w-5 h-5 hover:text-red-500"
+              (click)="showDeleteForm($event,item)"></span-lucide>
+          </td>
 
-<!-- Tablo -->
-<table class="min-w-full border border-gray-200 text-sm text-left">
-  <thead class="bg-gray-100">
-    <tr>
-      <th class="px-4 py-2 cursor-pointer select-none" (click)="reverse()">
-        Link
-        <span-lucide
-          [img]="isAscending ? arrowUp : arrowDown"
-          class="w-4 h-4 inline-block ml-1"
-        ></span-lucide>
-      </th>
-      <th class="px-4 py-2 border-l cursor-pointer select-none" (click)="reverse()">
-        Site Adı
-        <span-lucide
-          [img]="isAscending ? arrowUp : arrowDown"
-          class="w-4 h-4 inline-block ml-1"
-        ></span-lucide>
-      </th>
-      <th class="px-4 py-2 border-l cursor-pointer select-none" (click)="reverse()">
-        Açıklama
-        <span-lucide
-          [img]="isAscending ? arrowUp : arrowDown"
-          class="w-4 h-4 inline-block ml-1"
-        ></span-lucide>
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let item of links" class="hover:bg-gray-50">
-      <td class="px-4 py-2">{{ item.url }}</td>
-      <td class="px-4 py-2">{{ item.name }}</td>
-      <td class="px-4 py-2">{{ item.description }}</td>
-    </tr>
-  </tbody>
-</table>
-
+        </tr>
+      </tbody>
+    </table>
+    <!-- Tablo -->
+    
 
   <!-- Sayfalama -->
   <div class="flex text-center justify-between mt-4">
@@ -80,12 +76,43 @@
   <div *ngIf="openAddForm"
     class="fixed inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm z-50 transition-opacity">
     <div class="relative bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-      <button class="absolute top-3 right-3 text-gray-500 hover:text-red-500 transition" (click)="closeAddForm()">
+      <button class="absolute top-3 right-3 text-gray-500 hover:text-red-500 transition cursor-pointer"
+        (click)="closeAddForm()">
         <!-- Daha şık bir X ikonu -->
         <span-lucide [img]="x" class="w-6 h-6"></span-lucide>
       </button>
 
       <app-link-add></app-link-add>
+    </div>
+  </div>
+
+  <div *ngIf="openUpdateForm"
+    class="fixed inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm z-50 transition-opacity">
+    <div class="relative bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+      <button class="absolute top-3 right-3 text-gray-500 hover:text-red-500 transition cursor-pointer"
+        (click)="closeUpdateForm()">
+        <span-lucide [img]="x" class="w-6 h-6"></span-lucide>
+      </button>
+
+      <app-link-update [currentLink]="currentLink"></app-link-update>
+    </div>
+  </div>
+
+  <div *ngIf="openDeleteForm"
+    class="fixed inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm z-50 transition-opacity">
+    <div class="relative bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+      <button class="absolute top-3 right-3 text-gray-500 hover:text-red-500 transition cursor-pointer"
+        (click)="closeDeleteForm()">
+        <span-lucide [img]="x" class="w-6 h-6"></span-lucide>
+      </button>
+      <div class="text-center pt-4">
+        {{deletedLink.name}} bağlantısını silmek istediğinize emin misiniz ?
+        <div class="text-center">
+          <button (click)="deleteLink()"
+            class="bg-red-500 px-5 py-2 mt-2 cursor-pointer text-white rounded">Sil</button>
+        </div>
+      </div>
+
     </div>
   </div>
 

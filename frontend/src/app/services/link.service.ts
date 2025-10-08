@@ -33,9 +33,19 @@ export class LinkService {
     })
   }
 
-  add(link: Link): Observable<ListResponseModel<Link>>{
+  add(link: Link): Observable<SingleResponseModel<Link>>{
     let newUrl = this.apiUrl+"add";
-    return this.httpClient.post<ListResponseModel<Link>>(newUrl,link);
+    return this.httpClient.post<SingleResponseModel<Link>>(newUrl,link);
+  }
+
+  update(link: Link): Observable<SingleResponseModel<Link>>{
+    let newUrl = this.apiUrl+"update";
+    return this.httpClient.put<SingleResponseModel<Link>>(newUrl,link);
+  }
+
+  delete(link: Link): Observable<SingleResponseModel<Link>>{
+    let newUrl = this.apiUrl+"delete";
+    return this.httpClient.delete<SingleResponseModel<Link>>(newUrl,{body: link});
   }
 
 }
