@@ -94,8 +94,10 @@ namespace Business.Concrete
         [ValidationAspect(typeof(LinkValidator))]
         public IResult Update(Link link)
         {
+            var newLink = link;
+            newLink.UpdatedAt = DateTime.Now;
             _linkDal.Update(link);
-            return new SuccessResult("Link güncellendi.");
+            return new SuccessResult("Link başarıyla güncellendi.");
         }
     }
 }
