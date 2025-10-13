@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Business.ValidationRules;
+using Core.Aspects.Autofac.Performance;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -23,7 +24,7 @@ namespace Business.Concrete
             _linkDal = linkDal;
         }
 
-        [ValidationAspect(typeof(LinkValidator))]
+        [ValidationAspect(typeof(LinkValidator),Priority =1)]
         public IResult Add(Link link)
         {
             var newLink = link;
@@ -48,6 +49,7 @@ namespace Business.Concrete
             return new ErrorDataResult<Link>("Bu Id'ye ait link bulunmamaktadır.");
         }
 
+        [PerformanceAspect(1)]
         public IDataResult<List<Link>> Getall()
         {
             var result = _linkDal.GetAll();
@@ -58,6 +60,7 @@ namespace Business.Concrete
             return new ErrorDataResult<List<Link>>("Link bulunmamaktadır.");
         }
 
+        [PerformanceAspect(1)]
         public IDataResult<SpecifiedLinksDto> GetSpecifiedLinks(PageDto pageDto)
         {
             var linksQuery = Getall().Data.AsQueryable();
