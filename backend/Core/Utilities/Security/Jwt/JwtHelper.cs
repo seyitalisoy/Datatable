@@ -1,0 +1,78 @@
+﻿
+using Core.Entities.Identity;
+using Core.Utilities.Security.Encryption;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Core.Utilities.Security.Jwt
+{
+    public class JwtHelper : ITokenHelper
+    {
+        private DateTime _accessTokenExpiration;
+        private IConfiguration Configuration { get; }
+
+        private TokenOptions _tokenOptions;
+
+        public JwtHelper(IConfiguration configuration)
+        {
+            Configuration = configuration;
+            _tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
+        }
+
+        public AccessToken CreateToken(User user, List<OperationClaim> operationClaims)
+        {
+            _accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration);
+            var securityKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.SecurityKey);
+            var signinCredentials = SigningCredentialsHelper.CreateSigninCredentials(securityKey);
+            var jwt = CreateJwtSecurityToken(_tokenOptions, user, signinCredentials, operationClaims);
+            var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+            var token = jwtSecurityTokenHandler.WriteToken(jwt);
+
+            return new AccessToken
+            {
+                Token = token,
+                Expiration = _accessTokenExpiration
+            };
+
+        }
+
+        public JwtSecurityToken CreateJwtSecurityToken(TokenOptions tokenOptions,
+            User user, SigningCredentials signingCredentials, List<OperationClaim> operationClaims)
+        {
+            var jwt = new JwtSecurityToken(
+                issuer: tokenOptions.Issuer,
+                audience: tokenOptions.Audience,
+                expires: _accessTokenExpiration,
+                notBefore: DateTime.Now,
+                claims: SetClaims(user, operationClaims),
+                signingCredentials: signingCredentials
+                );
+            return jwt;
+
+        }
+
+        public ICollection<Claim> SetClaims(User user, List<OperationClaim> operationClaims)
+        {
+            var claims = new List<Claim>();
+
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+            claims.Add(new Claim(ClaimTypes.Name, $"{user.FirstName}+{user.LastName}"));
+            claims.Add(new Claim(ClaimTypes.Email, user.Email));
+            if (operationClaims!=null && operationClaims.Any())
+            {
+                foreach (var item in operationClaims)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role,item.Name));
+                }
+            }
+            return claims;
+        }
+    }
+}
