@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,6 +15,8 @@ namespace Core.Utilities.IoC
         {
             // servisler gelecek
             services.AddSingleton<Stopwatch>();
+
+            services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
         }
     }
 }
