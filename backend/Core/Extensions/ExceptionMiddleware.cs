@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Core.Utilities.Exceptions;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
@@ -53,6 +54,20 @@ namespace Core.Extensions
                     StatusCode = 400
                 }.ToString());
             }
+
+            if (e is AuthorizationException)
+            {
+                httpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                message = e.Message;
+
+                return httpContext.Response.WriteAsync(new ErrorDetails
+                {
+                    Message = message,
+                    StatusCode = httpContext.Response.StatusCode
+                }.ToString());
+       
+            }
+
             return httpContext.Response.WriteAsync(new ErrorDetails
             {
                 Message = message,
