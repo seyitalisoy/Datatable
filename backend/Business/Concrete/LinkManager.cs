@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Business.ValidationRules;
 using Core.Aspects.Autofac.Performance;
+using Core.Aspects.Autofac.Security;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -24,7 +25,8 @@ namespace Business.Concrete
             _linkDal = linkDal;
         }
 
-        [ValidationAspect(typeof(LinkValidator),Priority =1)]
+        [ClaimsControlAspect("link.add,admin",Priority =1)]
+        [ValidationAspect(typeof(LinkValidator),Priority =2)]
         public IResult Add(Link link)
         {
             var newLink = link;
